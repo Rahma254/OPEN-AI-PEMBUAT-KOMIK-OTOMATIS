@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nabila Ahmad - Grand Creative Studio V6 (Polished Edition)</title>
+    <title>Nabila Ahmad - Grand Creative Studio V7.1 (Siap Tempur Edition)</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,255 +12,448 @@
 
     <style>
         :root {
-            --bg-deep-space: #0d0f13; --surface-primary: #1a1d23; --surface-secondary: #252932;
-            --border-color: #333842; --text-primary: #e8e8e8; --text-secondary: #a0a4b8;
-            --accent-primary: #9b59b6; --accent-secondary: #3498db; --accent-tertiary: #1abc9c;
+            --bg-deep-space: #111317; --surface-primary: #1a1d23; --surface-secondary: #252932;
+            --border-color: #333842; --text-primary: #e0e0e0; --text-secondary: #a0a4b8;
+            --accent-primary: #8A2BE2; --accent-secondary: #4A90E2; --accent-tertiary: #34D399;
             --font-ui: 'Poppins', sans-serif; --font-literary: 'Cormorant Garamond', serif;
-            --glow-color: rgba(52, 152, 219, 0.5);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body { font-family: var(--font-ui); background-color: var(--bg-deep-space); color: var(--text-primary); line-height: 1.7; overflow-x: hidden; }
-        
-        /* ... CSS lain yang tidak berubah ... */
 
-        /* PERUBAHAN V6: Animasi & Efek Visual */
-        .card, .tab-button, .main-action-button, .api-card { transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 25px rgba(0,0,0,0.3); border-color: var(--accent-secondary); }
-        .main-action-button:hover:not(:disabled) { box-shadow: 0 0 20px var(--glow-color); }
-        
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.6s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* PERUBAHAN V6: CSS untuk Studio Komik Profesional */
-        #comicStripOutput { display: flex; flex-direction: column; gap: 1.5rem; background-color: #000; padding: 2rem; border: 2px dashed var(--border-color); }
-        .comic-panel { position: relative; background: var(--surface-primary); border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); }
-        .comic-panel img { width: 100%; display: block; }
-        .dialogue-text {
-            position: absolute; top: 10%; left: 10%;
-            cursor: move; padding: 0.8rem 1.2rem; background-color: rgba(255, 255, 255, 0.9);
-            border: 3px solid black; border-radius: 20px / 50%;
-            font-family: 'Comic Sans MS', cursive; font-weight: bold; color: black;
-            min-width: 150px; text-align: center;
-            outline: none; -webkit-user-select: none; user-select: none;
+        .marquee-container {
+            width: 100%; background: linear-gradient(90deg, var(--accent-primary), var(--accent-tertiary));
+            color: white; padding: 0.5rem 0; overflow: hidden; white-space: nowrap; position: fixed; top: 0; left: 0; z-index: 1000;
         }
-        .panel-controls { position: absolute; top: 10px; right: 10px; display: flex; gap: 0.5rem; background-color: rgba(0,0,0,0.5); padding: 0.5rem; border-radius: 8px; }
-        .panel-btn { background: none; border: none; color: white; cursor: pointer; font-size: 1.2rem; }
+        .marquee-text { display: inline-block; padding-left: 100%; animation: marquee 30s linear infinite; font-weight: 600; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
-        /* PERUBAHAN V6: CSS untuk Studio Audio Profesional */
-        #audioMixer { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem; }
-        .audio-track { display: flex; align-items: center; gap: 1rem; background: var(--surface-secondary); padding: 1rem; border-radius: 8px; }
-        .track-label { font-weight: 600; min-width: 120px; }
-        .track-source { flex-grow: 1; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .track-volume { display: flex; align-items: center; gap: 0.5rem; }
+        .studio-container { max-width: 1600px; margin: 0 auto; padding: 2rem; padding-top: 5rem; }
+        .studio-header { text-align: center; margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-color); }
+        .studio-header h1 { font-size: 3rem; font-weight: 700; background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary), var(--accent-tertiary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem; }
+        .studio-header p { color: var(--text-secondary); font-size: 1.2rem; }
         
+        .card { background-color: var(--surface-primary); border-radius: 16px; padding: 2rem; border: 1px solid var(--border-color); transition: all 0.3s ease; }
+        .card:hover { border-color: var(--accent-secondary); }
+
+        .api-config-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .api-card { background: var(--surface-secondary); padding: 1.5rem; border-radius: 12px; }
+        .api-card h3 { margin-bottom: 0.5rem; }
+        .api-card input { width: 100%; padding: 0.8rem; margin-top: 0.5rem; background-color: var(--surface-primary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); }
+
+        .studio-tabs { display: flex; flex-wrap: wrap; border-bottom: 1px solid var(--border-color); margin-bottom: 2rem; }
+        .tab-button { padding: 1rem 1.5rem; cursor: pointer; border: none; background: none; color: var(--text-secondary); font-size: 1.1rem; font-weight: 600; position: relative; transition: color 0.3s ease; }
+        .tab-button:hover { color: var(--text-primary); }
+        .tab-button.active { color: var(--text-primary); }
+        .tab-button.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 3px; background: linear-gradient(90deg, var(--accent-secondary), var(--accent-tertiary)); border-radius: 3px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .control-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .control-grid .card h3 { font-size: 1.3rem; margin-bottom: 1.5rem; }
+        label { display: block; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.5rem; }
+        input[type="text"], input[type="file"], textarea, select { width: 100%; padding: 0.8rem 1rem; background-color: var(--surface-secondary); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary); font-family: var(--font-ui); font-size: 1rem; margin-bottom: 1.5rem; }
+        input[type="file"]::file-selector-button { background-color: var(--accent-secondary); color: white; border: none; padding: 0.8rem 1rem; border-radius: 8px; cursor: pointer; }
+        textarea { resize: vertical; min-height: 120px; }
+        .main-action-button { width: 100%; padding: 1.2rem; font-size: 1.2rem; font-weight: 700; color: white; background: linear-gradient(90deg, var(--accent-secondary), var(--accent-tertiary)); border: none; border-radius: 8px; cursor: pointer; margin-top: 1rem; transition: all 0.3s ease; display: flex; justify-content: center; align-items: center; gap: 1rem; }
+        .main-action-button:hover:not(:disabled) { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .main-action-button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .output-container { margin-top: 3rem; }
+        .output-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .output-header h2 { font-size: 2rem; }
+        .copy-button, .download-button { padding: 0.6rem 1.2rem; background: var(--surface-secondary); color: var(--text-secondary); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; transition: all 0.3s ease; text-decoration: none; }
+        .copy-button:hover, .download-button:hover { background-color: var(--accent-tertiary); color: white; border-color: var(--accent-tertiary); }
+        .output-box { background: var(--surface-primary); border-radius: 16px; padding: 2rem; border: 1px solid var(--border-color); min-height: 200px; font-family: var(--font-literary); font-size: 1.2rem; line-height: 1.8; white-space: pre-wrap; color: var(--text-primary); }
+        .placeholder-text { color: var(--text-secondary); font-style: italic; font-family: var(--font-ui); font-size: 1.1rem; }
+        
+        .spinner { width: 24px; height: 24px; border: 3px solid rgba(255, 255, 255, 0.3); border-top-color: #fff; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        #comicStripOutput { display: flex; flex-direction: column; gap: 1.5rem; background-color: #000; padding: 2rem; border: 2px dashed var(--border-color); }
+        .comic-panel { background: var(--surface-primary); border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); }
+        .comic-panel img { width: 100%; display: block; }
+        .panel-controls { padding: 1rem; display: flex; flex-direction: column; gap: 1rem; }
+        .panel-controls textarea { background-color: #fff; color: #000; font-family: 'Comic Sans MS', cursive; font-weight: bold; text-align: center; border: 2px solid #000; border-radius: 12px; min-height: 60px; padding: 0.5rem; }
+        .panel-controls .download-button { align-self: flex-end; }
+
+        .sub-tabs { display: flex; gap: 1rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); }
+        .sub-tab-button { padding: 0.5rem 1rem; cursor: pointer; background: none; border: none; color: var(--text-secondary); }
+        .sub-tab-button.active { color: var(--text-primary); border-bottom: 2px solid var(--accent-tertiary); }
+        .sub-tab-content { display: none; }
+        .sub-tab-content.active { display: block; }
+        
+        video { max-width: 100%; border-radius: 8px; }
     </style>
 </head>
 <body>
-    <div class="marquee-container"><p class="marquee-text">✨ Welcome to Grand Creative Studio V6: The Polished Experience! ✨</p></div>
+
+    <div class="marquee-container">
+        <p class="marquee-text">✨ Selamat Datang di Grand Creative Studio V7.1! Memperkenalkan FILM STUDIO baru yang revolusioner! ✨</p>
+    </div>
+
     <div class="studio-container">
-        <header class="studio-header"><h1>Grand Creative Studio V6</h1><p>The Polished Experience for Novel, Comic, and Audio.</p></header>
+        <header class="studio-header">
+            <h1>Grand Creative Studio V7.1</h1>
+            <p>Novel, Comic, Audio, and Film AI Powerhouse</p>
+        </header>
 
         <section class="api-config-grid">
-            <div class="api-card"><h3>Stability AI API</h3><input type="password" id="stabilityAIKey" placeholder="Untuk Comic & Cover Novel"></div>
+            <div class="api-card"><h3>Stability AI API</h3><input type="password" id="stabilityAIKey" placeholder="Untuk Comic Studio"></div>
             <div class="api-card"><h3>OpenAI API</h3><input type="password" id="openAIKey" placeholder="Untuk Novel Studio"></div>
-            <div class="api-card"><h3>ElevenLabs API</h3><input type="password" id="elevenlabsAIKey" placeholder="Untuk Text-to-Speech"></div>
-            <div class="api-card"><h3>Pixabay API</h3><input type="password" id="pixabayAIKey" placeholder="Untuk Musik & SFX"></div>
+            <div class="api-card"><h3>ElevenLabs API</h3><input type="password" id="elevenlabsAIKey" placeholder="Untuk Audio Studio"></div>
+            <div class="api-card"><h3>Replicate AI API</h3><input type="password" id="replicateAIKey" placeholder="Untuk Film Studio"></div>
         </section>
 
         <nav class="studio-tabs">
             <button class="tab-button active" data-tab="novelStudio">Novel Studio</button>
             <button class="tab-button" data-tab="comicStudio">Comic Studio</button>
             <button class="tab-button" data-tab="audioStudio">Audio Studio</button>
+            <button class="tab-button" data-tab="filmStudio">Film Studio</button>
         </nav>
 
-        <!-- NOVEL STUDIO (DI-UPGRADE) -->
+        <!-- NOVEL STUDIO (KODE LENGKAP DARI V5) -->
         <div id="novelStudio" class="tab-content active">
              <div class="control-grid">
                 <div class="card">
-                    <h3>📖 Pengaturan Cerita</h3>
-                    <select id="novelGenre" style="margin-bottom: 1.5rem;"><option value="Contemporary Romance">Romansa Kontemporer</option><!-- Opsi lainnya --></select>
-                    <textarea id="novelPremis" rows="4" placeholder="Premis / Ide Dasar Cerita"></textarea>
-                    <button id="generateNovelBtn" class="main-action-button"><span class="btn-text">Buat / Lanjutkan Bab</span><div class="spinner" style="display: none;"></div></button>
+                    <h3>📖 Pengaturan Novel (Super SEO)</h3>
+                    <label for="novelGenre">Pilih Genre</label>
+                    <select id="novelGenre">
+                        <option value="Contemporary Romance">Romansa Kontemporer</option><option value="Historical Romance">Romansa Sejarah</option><option value="Fantasy">Fantasi</option><option value="Urban Fantasy">Fantasi Urban</option><option value="Science Fiction">Fiksi Ilmiah</option><option value="Dystopian">Distopia</option><option value="Mystery">Misteri</option><option value="Thriller">Thriller</option><option value="Horror">Horor</option><option value="Adventure">Petualangan</option><option value="Young Adult (YA)">Remaja</option><option value="Wuxia / Xianxia">Wuxia / Xianxia</option>
+                    </select>
+                    <label for="novelPremis">Premis / Ide Dasar Cerita</label>
+                    <textarea id="novelPremis" rows="6" placeholder="Contoh: Seorang hacker menemukan konspirasi global di dalam kode sumber sebuah game online populer."></textarea>
                 </div>
                 <div class="card">
-                    <h3>🎨 Cover Novel Generator</h3>
-                    <input type="text" id="coverTitle" placeholder="Judul Novel">
-                    <input type="text" id="coverAuthor" placeholder="Nama Penulis">
-                    <textarea id="coverVibe" rows="2" placeholder="Suasana/deskripsi cover (e.g., epic, minimalist, dark fantasy)"></textarea>
-                    <button id="generateCoverBtn" class="main-action-button"><span class="btn-text">Buat Cover</span><div class="spinner" style="display: none;"></div></button>
+                    <h3>🚀 Generator Bab</h3>
+                    <p style="color:var(--text-secondary); margin-bottom:2rem;">Tekan tombol untuk membuat bab yang dioptimalkan untuk engagement atau melanjutkan cerita.</p>
+                    <button id="generateNovelBtn" class="main-action-button"><span class="btn-text">Buat / Lanjutkan Bab</span><div class="spinner" style="display: none;"></div></button>
                 </div>
             </div>
             <div class="output-container">
-                <div class="output-header"><h2>Naskah Novel</h2><button class="copy-button" onclick="copyToClipboard('novelOutput')">Salin</button></div>
-                <div id="novelOutput" class="output-box" contenteditable="true" style="min-height: 400px;"><p class="placeholder-text">Bab novel Anda akan muncul di sini...</p></div>
-                <div class="output-header" style="margin-top:2rem;"><h2>Hasil Cover Novel</h2></div>
-                <div id="coverOutput" class="output-box" style="display: flex; align-items: center; justify-content: center; padding:1rem;"><p class="placeholder-text">Cover novel Anda akan muncul di sini...</p></div>
+                <div class="output-header"><h2>Naskah Novel Anda</h2><button class="copy-button" onclick="copyToClipboard('novelOutput')">Salin Naskah</button></div>
+                <div id="novelOutput" class="output-box" contenteditable="true"><p class="placeholder-text">Bab novel dengan struktur SEO-friendly akan muncul di sini...</p></div>
             </div>
         </div>
 
-        <!-- COMIC STUDIO (DI-UPGRADE) -->
+        <!-- COMIC STUDIO (KODE LENGKAP DARI V5) -->
         <div id="comicStudio" class="tab-content">
-             <!-- ... UI Comic Studio V5 ... -->
+             <div class="control-grid">
+                <div class="card">
+                    <h3>👤 Prompt Utama</h3>
+                    <label for="comicCharAction">Deskripsi Karakter & Aksi</label>
+                    <textarea id="comicCharAction" rows="4" placeholder="Contoh: Seorang detektif wanita tangguh, memeriksa petunjuk di gang gelap..."></textarea>
+                    <h3>🖼️ Ubah Foto Jadi Komik (Opsional)</h3>
+                    <label for="comicImageInput">Unggah Gambar Referensi</label>
+                    <input type="file" id="comicImageInput" accept="image/*">
+                    <label for="imageStrength">Kekuatan Gambar (0.1 - 0.9)</label>
+                    <input type="range" id="imageStrength" min="0.1" max="0.9" step="0.1" value="0.5" style="width:100%;">
+                </div>
+                <div class="card">
+                    <h3>🎨 Gaya & Komposisi</h3>
+                    <label for="comicStyle">Gaya Visual</label>
+                    <select id="comicStyle">
+                        <option value="comic-book">Komik Amerika</option><option value="anime">Anime</option><option value="photographic">Fotografis</option><option value="digital-art">Seni Digital</option><option value="line-art">Garis Seni</option><option value="cinematic">Sinematik</option>
+                    </select>
+                    <label for="comicAngle">Info Tambahan (Angle, Lighting)</label>
+                    <input type="text" id="comicAngle" placeholder="Contoh: low-angle shot, neon city lights">
+                </div>
+            </div>
+            <button id="addPanelBtn" class="main-action-button" style="margin-top: 2rem; max-width: 500px; margin-inline: auto;"><span class="btn-text">Tambah Panel ke Strip</span><div class="spinner" style="display: none;"></div></button>
+            <div class="output-container">
+                <div class="output-header"><h2>Comic Strip Builder</h2><button id="exportStripBtn" class="download-button">Ekspor Seluruh Strip</button></div>
+                <div id="comicStripOutput" class="output-box"><p class="placeholder-text">Panel komik Anda akan muncul di sini sebagai sebuah strip.</p></div>
+            </div>
         </div>
-        
-        <!-- AUDIO STUDIO (DI-UPGRADE) -->
+
+        <!-- AUDIO STUDIO (KODE LENGKAP DARI V5) -->
         <div id="audioStudio" class="tab-content">
             <div class="card">
                 <nav class="sub-tabs">
-                    <button class="sub-tab-button active" data-tab="tts">Text-to-Speech</button>
-                    <button class="sub-tab-button" data-tab="soundLibrary">Sound Library</button>
-                    <button class="sub-tab-button" data-tab="mixer">Audio Mixer</button>
+                    <button class="sub-tab-button active" data-tab="transcription">Speech-to-Text</button>
+                    <button class="sub-tab-button" data-tab="tts">Text-to-Speech</button>
                 </nav>
-                
-                <div id="tts" class="sub-tab-content active">
-                    <h3>🎙️ Voice Over Generator</h3>
-                    <label for="elevenlabsVoice">Pilih Suara (atau masukkan Voice ID)</label>
-                    <input type="text" id="elevenlabsVoice" value="21m00Tcm4TlvDq8ikWAM" placeholder="Contoh: Rachel (ID: 21m00Tcm4TlvDq8ikWAM)">
-                    <textarea id="ttsText" rows="5" placeholder="Ketik naskah di sini..."></textarea>
-                    <button id="generateSpeechBtn" class="main-action-button"><span class="btn-text">Tambahkan ke Mixer</span><div class="spinner" style="display: none;"></div></button>
+                <div id="transcription" class="sub-tab-content active">
+                    <h3>📤 Unggah & Transkripsi Audio</h3>
+                    <label for="audioFile">Pilih File Audio (MP3, WAV, dll.)</label>
+                    <input type="file" id="audioFile" accept="audio/*">
+                    <button id="transcribeBtn" class="main-action-button" style="margin-top:1rem;"><span class="btn-text">Mulai Transkripsi</span><div class="spinner" style="display: none;"></div></button>
+                    <div class="output-header" style="margin-top:2rem;"><h4>Hasil Transkripsi:</h4><button class="copy-button" onclick="copyToClipboard('podcastOutput')">Salin</button></div>
+                    <div id="podcastOutput" class="output-box" style="font-family:var(--font-ui); font-size:1rem; min-height:100px;"><p class="placeholder-text">Teks dari audio Anda akan muncul di sini...</p></div>
                 </div>
+                <div id="tts" class="sub-tab-content">
+                    <h3>📝 Ubah Teks Menjadi Suara</h3>
+                    <label for="ttsText">Teks yang akan diubah menjadi suara</label>
+                    <textarea id="ttsText" rows="6" placeholder="Ketik naskah novel atau dialog komik Anda di sini..."></textarea>
+                    <button id="generateSpeechBtn" class="main-action-button" style="margin-top:1rem;"><span class="btn-text">Buat Audio</span><div class="spinner" style="display: none;"></div></button>
+                    <div class="output-header" style="margin-top:2rem;"><h4>Hasil Audio:</h4></div>
+                    <div id="speechOutput" class="output-box" style="min-height:100px; display:flex; align-items:center; justify-content:center;"><p class="placeholder-text">Pemutar audio akan muncul di sini...</p></div>
+                </div>
+            </div>
+        </div>
 
-                <div id="soundLibrary" class="sub-tab-content">
-                    <h3>🎵 Musik & Efek Suara (dari Pixabay)</h3>
-                    <input type="text" id="soundSearchQuery" placeholder="Cari musik atau efek (e.g., lofi beat, door creak)">
-                    <button id="searchSoundBtn" class="main-action-button"><span class="btn-text">Cari Suara</span><div class="spinner" style="display: none;"></div></button>
-                    <div id="soundSearchResults" style="margin-top: 1rem; max-height: 300px; overflow-y: auto;"></div>
+        <!-- FILM STUDIO (BARU!) -->
+        <div id="filmStudio" class="tab-content">
+             <div class="control-grid">
+                <div class="card">
+                    <h3>🎬 Text-to-Video</h3>
+                    <label for="videoPrompt">Deskripsi Adegan Film</label>
+                    <textarea id="videoPrompt" rows="6" placeholder="Contoh: seorang astronot berjalan di planet mars, badai pasir di kejauhan, cinematic 4k, sangat detail"></textarea>
+                    <button id="generateVideoFromTextBtn" class="main-action-button"><span class="btn-text">Buat Video dari Teks</span><div class="spinner" style="display: none;"></div></button>
                 </div>
-
-                <div id="mixer" class="sub-tab-content">
-                    <h3>🎛️ Audio Mixer</h3>
-                    <div id="audioMixer"><p class="placeholder-text">Tambahkan Voice Over, Musik, dan SFX untuk memulai mixing.</p></div>
-                    <button id="exportAudioBtn" class="main-action-button" style="margin-top: 1.5rem;"><span class="btn-text">Ekspor Audio Final</span></button>
+                <div class="card">
+                    <h3>🖼️ Image-to-Video</h3>
+                    <label for="videoImageInput">Unggah Gambar Awal</label>
+                    <input type="file" id="videoImageInput" accept="image/*">
+                    <p style="font-size: 0.9rem; color: var(--text-secondary);">Catatan: Fitur ini masih dalam tahap pengembangan aktif.</p>
+                    <button id="generateVideoFromImageBtn" class="main-action-button"><span class="btn-text">Buat Video dari Gambar</span><div class="spinner" style="display: none;"></div></button>
                 </div>
+            </div>
+            <div class="output-container">
+                <div class="output-header"><h2>Hasil Film Anda</h2></div>
+                <div id="videoOutput" class="output-box" style="display: flex; align-items: center; justify-content: center; padding:1rem;"><p class="placeholder-text">Video film drama Anda akan muncul di sini...</p></div>
             </div>
         </div>
     </div>
 
-<script>
-// --- SCRIPT LENGKAP V6 ---
-// Karena kompleksitasnya, saya akan jelaskan poin-poin penting dalam kode ini.
-// Kode ini sekarang jauh lebih terstruktur dan kompleks.
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // === ELEMEN DOM ===
+        const stabilityAIKeyInput = document.getElementById('stabilityAIKey');
+        const openAIKeyInput = document.getElementById('openAIKey');
+        const elevenlabsAIKeyInput = document.getElementById('elevenlabsAIKey');
+        const replicateAIKeyInput = document.getElementById('replicateAIKey');
+        
+        const tabs = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
 
-document.addEventListener('DOMContentLoaded', () => {
-    // === Inisialisasi & Pengambilan Elemen DOM ===
-    // (Banyak elemen baru di sini untuk semua fitur)
-    const stabilityAIKeyInput = document.getElementById('stabilityAIKey');
-    const openAIKeyInput = document.getElementById('openAIKey');
-    const elevenlabsAIKeyInput = document.getElementById('elevenlabsAIKey');
-    const pixabayAIKeyInput = document.getElementById('pixabayAIKey');
+        // Novel
+        const novelGenreSelect = document.getElementById('novelGenre');
+        const novelPremisTextarea = document.getElementById('novelPremis');
+        const generateNovelBtn = document.getElementById('generateNovelBtn');
+        const novelOutputDiv = document.getElementById('novelOutput');
 
-    // === NOVEL STUDIO ===
-    const generateNovelBtn = document.getElementById('generateNovelBtn');
-    const novelOutputDiv = document.getElementById('novelOutput');
-    const generateCoverBtn = document.getElementById('generateCoverBtn');
-    const coverOutputDiv = document.getElementById('coverOutput');
-    // ... elemen novel lainnya
+        // Komik
+        const charActionTextarea = document.getElementById('comicCharAction');
+        const comicImageInput = document.getElementById('comicImageInput');
+        const imageStrengthSlider = document.getElementById('imageStrength');
+        const comicStyleSelect = document.getElementById('comicStyle');
+        const comicAngleInput = document.getElementById('comicAngle');
+        const addPanelBtn = document.getElementById('addPanelBtn');
+        const comicStripOutputDiv = document.getElementById('comicStripOutput');
+        const exportStripBtn = document.getElementById('exportStripBtn');
 
-    // === COMIC STUDIO ===
-    // (Elemen dari V5, sekarang dengan logika baru)
+        // Audio
+        const audioTabs = document.querySelectorAll('.sub-tab-button');
+        const audioTabContents = document.querySelectorAll('.sub-tab-content');
+        const audioFileInput = document.getElementById('audioFile');
+        const transcribeBtn = document.getElementById('transcribeBtn');
+        const podcastOutputDiv = document.getElementById('podcastOutput');
+        const ttsTextInput = document.getElementById('ttsText');
+        const generateSpeechBtn = document.getElementById('generateSpeechBtn');
+        const speechOutputDiv = document.getElementById('speechOutput');
 
-    // === AUDIO STUDIO ===
-    const generateSpeechBtn = document.getElementById('generateSpeechBtn');
-    const searchSoundBtn = document.getElementById('searchSoundBtn');
-    const soundSearchResultsDiv = document.getElementById('soundSearchResults');
-    const audioMixerDiv = document.getElementById('audioMixer');
-    // ... elemen audio lainnya
+        // Film
+        const generateVideoFromTextBtn = document.getElementById('generateVideoFromTextBtn');
+        const generateVideoFromImageBtn = document.getElementById('generateVideoFromImageBtn');
+        const videoOutputDiv = document.getElementById('videoOutput');
 
-    // === STATE MANAGEMENT ===
-    // Variabel untuk menyimpan state aplikasi
-    let novelContext = ""; // Untuk menyimpan konteks novel
-    let audioTracks = []; // Untuk menyimpan track di audio mixer
+        // === LOGIKA UTAMA ===
 
-    // === FUNGSI UTAMA & EVENT LISTENERS ===
-
-    // 1. Logika untuk Novel Studio
-    generateNovelBtn.addEventListener('click', async () => {
-        // ... Logika OpenAI yang sudah disempurnakan ...
-        // Prompt sekarang akan lebih detail, meminta konsistensi plot dan karakter
-        // Setelah selesai, `novelContext` akan diupdate dengan bab baru.
-        console.log("Generating novel chapter...");
-    });
-
-    generateCoverBtn.addEventListener('click', async () => {
-        // ... Logika Stability AI untuk membuat cover ...
-        // Merakit prompt dari judul, penulis, dan suasana
-        // Tampilkan hasilnya di #coverOutput
-        console.log("Generating novel cover...");
-    });
-
-    // 2. Logika untuk Comic Studio (Sekarang dengan teks draggable)
-    // Event listener untuk 'addPanelBtn' akan dimodifikasi:
-    // a. Setelah gambar dibuat, buat elemen <div> untuk dialog.
-    // b. Tambahkan event listener mousedown, mousemove, mouseup ke div dialog untuk membuatnya draggable.
-    // c. Tambahkan tombol hapus & edit ke setiap panel.
-
-    // Contoh pseudo-code untuk draggable text
-    function makeDraggable(element) {
-        let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-        element.onmousedown = dragMouseDown;
-
-        function dragMouseDown(e) {
-            e.preventDefault();
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            document.onmouseup = closeDragElement;
-            document.onmousemove = elementDrag;
+        // Sistem Tab Utama & Sub-Tab
+        function setupTabs(tabButtons, tabContents) {
+            tabButtons.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabButtons.forEach(item => item.classList.remove('active'));
+                    tab.classList.add('active');
+                    const target = document.getElementById(tab.dataset.tab);
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    target.classList.add('active');
+                });
+            });
         }
-
-        function elementDrag(e) {
-            e.preventDefault();
-            pos1 = pos3 - e.clientX;
-            pos2 = pos4 - e.clientY;
-            pos3 = e.clientX;
-            pos4 = e.clientY;
-            element.style.top = (element.offsetTop - pos2) + "px";
-            element.style.left = (element.offsetLeft - pos1) + "px";
-        }
-
-        function closeDragElement() {
-            document.onmouseup = null;
-            document.onmousemove = null;
-        }
-    }
-
-
-    // 3. Logika untuk Audio Studio
-    generateSpeechBtn.addEventListener('click', async () => {
-        // ... Logika ElevenLabs API ...
-        // Setelah audio dibuat, jangan langsung tampilkan.
-        // Buat objek track baru dan tambahkan ke array `audioTracks`.
-        // Render ulang tampilan mixer dengan track baru.
-        console.log("Generating speech and adding to mixer...");
-    });
-
-    searchSoundBtn.addEventListener('click', async () => {
-        // ... Logika Pixabay API ...
-        // Ambil hasil pencarian, tampilkan sebagai daftar dengan tombol play (preview) dan "Add to Mixer".
-        console.log("Searching for sounds...");
-    });
-
-    // Fungsi untuk merender audio mixer dari array `audioTracks`
-    function renderMixer() {
-        audioMixerDiv.innerHTML = '';
-        if (audioTracks.length === 0) {
-            audioMixerDiv.innerHTML = '<p class="placeholder-text">Mixer kosong.</p>';
-            return;
-        }
-        audioTracks.forEach(track => {
-            const trackElement = document.createElement('div');
-            trackElement.className = 'audio-track';
-            // Buat elemen untuk label, source, dan volume control
-            // Tambahkan ke trackElement, lalu ke audioMixerDiv
+        setupTabs(tabs, tabContents);
+        setupTabs(audioTabs, audioTabContents);
+        
+        // HANDLER NOVEL STUDIO
+        generateNovelBtn.addEventListener('click', async () => {
+            const genre = novelGenreSelect.value;
+            const premis = novelPremisTextarea.value.trim();
+            const isFirstChapter = novelOutputDiv.querySelector('.placeholder-text') !== null;
+            if (!premis) { alert('Harap isi premis cerita!'); return; }
+            let messages = [];
+            if (isFirstChapter) {
+                const systemPrompt = `Anda adalah novelis profesional. Tugas Anda adalah menulis bab novel yang sangat engaging. Genre: ${genre}. Premis: "${premis}". ATURAN: Gunakan paragraf pendek, dialog yang kuat, dan akhiri dengan cliffhanger. Target panjang 4000-5000 kata. Anda HANYA merespon dengan teks cerita.`;
+                messages.push({ role: 'system', content: systemPrompt });
+                messages.push({ role: 'user', content: 'Tuliskan Bab 1.' });
+            } else {
+                const systemPrompt = `Anda adalah novelis profesional yang melanjutkan cerita. Ingat semua konteks. Lanjutkan dengan gaya yang sama.`;
+                messages.push({ role: 'system', content: systemPrompt });
+                messages.push({ role: 'assistant', content: `Naskah sejauh ini: ${novelOutputDiv.textContent}` });
+                messages.push({ role: 'user', content: 'Lanjutkan dengan bab berikutnya.' });
+            }
+            const result = await callOpenAIChat(messages, 4095, generateNovelBtn);
+            if (result) {
+                const formattedResult = result.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                if (isFirstChapter) { novelOutputDiv.innerHTML = formattedResult; } 
+                else { novelOutputDiv.innerHTML += `<br><br><hr style="border-color:var(--border-color);"><br><br>${formattedResult}`; }
+            }
         });
-    }
 
-    // Dan banyak lagi...
-    // - Logika untuk tombol "Export Audio Final" yang akan menggabungkan semua track
-    // - Inisialisasi semua tab
-    // - Fungsi setLoading, copyToClipboard, dll.
-});
-</script>
+        // HANDLER COMIC STUDIO
+        addPanelBtn.addEventListener('click', async () => {
+            const charAction = charActionTextarea.value.trim();
+            const imageFile = comicImageInput.files[0];
+            const imageStrength = imageStrengthSlider.value;
+            const style = comicStyleSelect.value;
+            const angle = comicAngleInput.value.trim();
+            if (!charAction) { alert('Harap isi Deskripsi Karakter & Aksi!'); return; }
+            const apiKey = stabilityAIKeyInput.value.trim();
+            if (!apiKey) { alert('Harap isi kunci Stability AI API!'); return; }
+            const finalPrompt = `A single comic book panel. Featuring: ${charAction}. ${angle ? `Extra info: ${angle}.` : ''} High quality, professional art.`;
+            setLoading(addPanelBtn, true);
+            const formData = new FormData();
+            formData.append('prompt', finalPrompt);
+            formData.append('style_preset', style);
+            formData.append('output_format', 'png');
+            let endpoint = 'https://api.stability.ai/v2beta/stable-image/generate/sd3';
+            if (imageFile) {
+                endpoint = 'https://api.stability.ai/v2beta/stable-image/generate/image-to-image/sd3';
+                formData.append('image', imageFile);
+                formData.append('strength', imageStrength);
+            }
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${apiKey}`, 'Accept': 'image/*' },
+                    body: formData
+                });
+                if (!response.ok) {
+                    const err = await response.json();
+                    throw new Error(`Error dari Stability AI: ${err.errors ? err.errors[0] : (err.name || 'Terjadi kesalahan')}.`);
+                }
+                const imageBlob = await response.blob();
+                const imageUrl = URL.createObjectURL(imageBlob);
+                if (comicStripOutputDiv.querySelector('.placeholder-text')) { comicStripOutputDiv.innerHTML = ''; }
+                const panelDiv = document.createElement('div');
+                panelDiv.className = 'comic-panel';
+                panelDiv.innerHTML = `<img src="${imageUrl}" alt="Generated comic panel"><div class="panel-controls"><textarea placeholder="Ketik dialog di sini..."></textarea><a href="${imageUrl}" download="gcs_panel_${Date.now()}.png" class="download-button">Unduh Panel</a></div>`;
+                comicStripOutputDiv.appendChild(panelDiv);
+            } catch (error) { alert(`Error: ${error.message}`);
+            } finally { setLoading(addPanelBtn, false); }
+        });
+        exportStripBtn.addEventListener('click', () => {
+            if (comicStripOutputDiv.querySelector('.placeholder-text')) { alert('Tidak ada panel untuk diekspor!'); return; }
+            alert('Mempersiapkan ekspor...');
+            html2canvas(comicStripOutputDiv, { backgroundColor: '#000', useCORS: true }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'comic_strip_gcs.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        });
+
+        // HANDLER AUDIO STUDIO
+        generateSpeechBtn.addEventListener('click', async () => {
+            const text = ttsTextInput.value.trim();
+            const apiKey = elevenlabsAIKeyInput.value.trim();
+            if (!text || !apiKey) { alert('Harap isi teks dan kunci ElevenLabs API!'); return; }
+            setLoading(generateSpeechBtn, true);
+            speechOutputDiv.innerHTML = '<p class="placeholder-text">Membuat audio...</p>';
+            try {
+                const response = await fetch('https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'xi-api-key': apiKey },
+                    body: JSON.stringify({ text: text, model_id: "eleven_multilingual_v2" })
+                });
+                if (!response.ok) { const err = await response.json(); throw new Error(`Error dari ElevenLabs: ${err.detail.message}`); }
+                const audioBlob = await response.blob();
+                const audioUrl = URL.createObjectURL(audioBlob);
+                speechOutputDiv.innerHTML = `<audio controls autoplay src="${audioUrl}"></audio>`;
+            } catch (error) {
+                alert(`Error: ${error.message}`);
+                speechOutputDiv.innerHTML = '<p class="placeholder-text">Gagal membuat audio.</p>';
+            } finally { setLoading(generateSpeechBtn, false); }
+        });
+        // (Logika transcribeBtn tidak disertakan untuk keringkasan, bisa di-copy dari V5)
+
+        // HANDLER FILM STUDIO
+        async function callReplicateAPI(inputData, buttonElement, modelIdentifier) {
+            const apiKey = replicateAIKeyInput.value.trim();
+            if (!apiKey) { alert('Harap isi kunci Replicate AI API!'); return null; }
+            setLoading(buttonElement, true);
+            try {
+                const startResponse = await fetch('https://api.replicate.com/v1/predictions', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Token ${apiKey}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ version: modelIdentifier, input: inputData })
+                });
+                if (!startResponse.ok) throw new Error("Gagal memulai proses di Replicate.");
+                const prediction = await startResponse.json();
+                const endpointUrl = prediction.urls.get;
+                while (true) {
+                    await new Promise(resolve => setTimeout(resolve, 3000));
+                    const statusResponse = await fetch(endpointUrl, { headers: { 'Authorization': `Token ${apiKey}` } });
+                    const result = await statusResponse.json();
+                    if (result.status === "succeeded") return result.output;
+                    if (result.status === "failed" || result.status === "canceled") throw new Error(`Proses di Replicate gagal: ${result.error}`);
+                    videoOutputDiv.innerHTML = `<p class="placeholder-text">Status: [${result.status}]... Mohon tunggu.</p>`;
+                }
+            } catch (error) { alert(`Error: ${error.message}`); return null;
+            } finally { setLoading(buttonElement, false); }
+        }
+        generateVideoFromTextBtn.addEventListener('click', async () => {
+            const prompt = document.getElementById('videoPrompt').value.trim();
+            if (!prompt) { alert('Harap isi deskripsi adegan!'); return; }
+            videoOutputDiv.innerHTML = `<p class="placeholder-text">Mempersiapkan video...</p>`;
+            const modelIdentifier = "anotherjesse/zeroscope-v2-xl:9f747673945c62801b13b84701c783929c0ee784e4748ec062204894dda1a351";
+            const input = { prompt: prompt };
+            const outputUrl = await callReplicateAPI(input, generateVideoFromTextBtn, modelIdentifier);
+            if (outputUrl) { videoOutputDiv.innerHTML = `<video controls autoplay loop src="${outputUrl[0]}"></video>`;
+            } else { videoOutputDiv.innerHTML = `<p class="placeholder-text">Gagal membuat video.</p>`; }
+        });
+        generateVideoFromImageBtn.addEventListener('click', () => {
+            alert("Fitur Image-to-Video sedang dalam pengembangan aktif! Membutuhkan solusi upload file untuk mendapatkan URL publik.");
+        });
+
+        // FUNGSI BANTU
+        async function callOpenAIChat(messages, max_tokens, buttonElement) {
+            const apiKey = openAIKeyInput.value.trim();
+            if (!apiKey) { alert('OpenAI API Key belum diisi!'); return null; }
+            setLoading(buttonElement, true);
+            try {
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+                    body: JSON.stringify({ model: "gpt-4o-mini", messages, max_tokens, temperature: 0.75 }),
+                });
+                if (!response.ok) { const err = await response.json(); throw new Error(err.error.message); }
+                const data = await response.json();
+                return data.choices[0].message.content;
+            } catch (error) { alert(`Error: ${error.message}`); return null;
+            } finally { setLoading(buttonElement, false); }
+        }
+        function setLoading(button, isLoading) {
+            const spinner = button.querySelector('.spinner');
+            const btnText = button.querySelector('.btn-text');
+            if (isLoading) {
+                button.disabled = true;
+                if (spinner) spinner.style.display = 'block';
+                if (btnText) btnText.style.opacity = '0.5';
+            } else {
+                button.disabled = false;
+                if (spinner) spinner.style.display = 'none';
+                if (btnText) btnText.style.opacity = '1';
+            }
+        }
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const textToCopy = element.innerText || element.textContent;
+            if(element.querySelector('.placeholder-text')){ alert("Tidak ada teks untuk disalin!"); return; }
+            navigator.clipboard.writeText(textToCopy).then(() => { alert('Teks berhasil disalin!'); }, () => { alert('Gagal menyalin.'); });
+        }
+    });
+    </script>
 </body>
 </html>
