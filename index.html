@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nabila Ahmad - Grand Creative Studio V3</title>
+    <title>Nabila Ahmad - Grand Creative Studio V3 (Leonardo Edition)</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -84,17 +84,18 @@
         </header>
 
         <section class="api-config-grid">
+            <!-- PERUBAHAN 1: Menambahkan input untuk kunci Leonardo.Ai -->
+            <div class="api-card">
+                <h3>Leonardo.Ai API</h3>
+                <input type="password" id="leonardoAIKey" placeholder="Untuk Comic Studio">
+            </div>
             <div class="api-card">
                 <h3>OpenAI API</h3>
-                <input type="password" id="openAIKey" placeholder="Untuk Novel & Komik">
+                <input type="password" id="openAIKey" placeholder="Untuk Novel Studio">
             </div>
              <div class="api-card">
                 <h3>AssemblyAI API</h3>
                 <input type="password" id="assemblyAIKey" placeholder="Untuk Transkripsi Podcast">
-            </div>
-             <div class="api-card">
-                <h3>Cleanvoice API</h3>
-                <input type="password" id="cleanvoiceAIKey" placeholder="Integrasi Segera Hadir..." disabled>
             </div>
         </section>
 
@@ -104,7 +105,7 @@
             <button class="tab-button" data-tab="podcastStudio">Podcast Studio</button>
         </nav>
 
-        <!-- NOVEL STUDIO -->
+        <!-- NOVEL STUDIO (Tidak ada perubahan di sini) -->
         <div id="novelStudio" class="tab-content active">
              <div class="control-grid">
                 <div class="card">
@@ -128,7 +129,7 @@
             </div>
         </div>
 
-        <!-- COMIC STUDIO -->
+        <!-- COMIC STUDIO (Banyak perubahan di sini) -->
         <div id="comicStudio" class="tab-content">
              <div class="control-grid">
                 <div class="card">
@@ -157,7 +158,7 @@
             </div>
         </div>
 
-        <!-- PODCAST STUDIO -->
+        <!-- PODCAST STUDIO (Tidak ada perubahan di sini) -->
         <div id="podcastStudio" class="tab-content">
             <div class="control-grid">
                 <div class="card">
@@ -182,6 +183,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // === ELEMEN DOM & Kunci API ===
+            // PERUBAHAN 2: Menambahkan variabel untuk input Leonardo.Ai
+            const leonardoAIKeyInput = document.getElementById('leonardoAIKey');
             const openAIKeyInput = document.getElementById('openAIKey');
             const assemblyAIKeyInput = document.getElementById('assemblyAIKey');
             const tabs = document.querySelectorAll('.tab-button');
@@ -221,11 +224,11 @@
                 });
             });
 
-            // Handler Novel Studio (Super SEO)
+            // Handler Novel Studio (Tidak berubah)
             generateNovelBtn.addEventListener('click', async () => {
                 const genre = novelGenreSelect.value;
                 const premis = novelPremisTextarea.value.trim();
-                const currentText = novelOutputDiv.innerHTML; // Gunakan innerHTML untuk mempertahankan format
+                const currentText = novelOutputDiv.innerHTML;
                 const isFirstChapter = novelOutputDiv.querySelector('.placeholder-text') !== null;
 
                 if (!premis) { alert('Harap isi premis cerita!'); return; }
@@ -253,7 +256,7 @@
                 }
             });
 
-            // Handler Comic Studio (Image Generator)
+            // PERUBAHAN 3: Handler Comic Studio diganti total menggunakan Leonardo.Ai API
             generateComicBtn.addEventListener('click', async () => {
                 const char = comicCharInput.value.trim();
                 const action = comicActionTextarea.value.trim();
@@ -263,26 +266,73 @@
                 const lighting = comicLightingInput.value.trim();
                 if (!char || !action) { alert('Harap isi Karakter dan Aksi!'); return; }
 
-                let finalPrompt = `A single comic book panel, ${style}. Featuring: ${char}, ${action}. ${emotion ? `Expression: ${emotion}.` : ''} ${angle ? `Shot: ${angle}.` : ''} ${lighting ? `Lighting: ${lighting}.` : ''} Extremely high quality, detailed, professional comic art.`;
+                const apiKey = leonardoAIKeyInput.value.trim();
+                if (!apiKey) {
+                    alert('Harap isi kunci Leonardo.Ai API terlebih dahulu!');
+                    return;
+                }
+
+                const finalPrompt = `A single comic book panel, ${style}. Featuring: ${char}, ${action}. ${emotion ? `Expression: ${emotion}.` : ''} ${angle ? `Shot: ${angle}.` : ''} ${lighting ? `Lighting: ${lighting}.` : ''} Extremely high quality, detailed, professional comic art.`;
                 
                 setLoading(generateComicBtn, true);
-                comicImageOutputDiv.innerHTML = '<div class="spinner"></div>';
+                comicImageOutputDiv.innerHTML = '<p class="placeholder-text">Langkah 1/2: Mengirim permintaan ke Leonardo.Ai...</p>';
                 
                 try {
-                    const apiKey = openAIKeyInput.value.trim();
-                    if (!apiKey) throw new Error('OpenAI API Key belum diisi!');
-                    
-                    const response = await fetch('https://api.openai.com/v1/images/generations', {
+                    // --- Langkah 1: Memulai proses pembuatan gambar ---
+                    const startGenerationResponse = await fetch('https://cloud.leonardo.ai/api/rest/v1/generations', {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}`},
-                        body: JSON.stringify({ model: "dall-e-3", prompt: finalPrompt, n: 1, size: "1024x1024" }),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${apiKey}`
+                        },
+                        body: JSON.stringify({
+                            prompt: finalPrompt,
+                            modelId: "6bef9f1b-29cb-40c7-b9df-32b51c1f67d3", // Model: Leonardo Diffusion XL
+                            width: 1024,
+                            height: 1024,
+                            num_images: 1,
+                            guidance_scale: 7
+                        }),
                     });
-                    if (!response.ok) {
-                        const err = await response.json();
-                        throw new Error(err.error.message);
+
+                    if (!startGenerationResponse.ok) {
+                        const err = await startGenerationResponse.json();
+                        throw new Error(`Error dari Leonardo (Langkah 1): ${err.error || 'Cek API Key Anda'}`);
                     }
-                    const data = await response.json();
-                    comicImageOutputDiv.innerHTML = `<img src="${data.data[0].url}" alt="Generated Comic Panel">`;
+                    
+                    const startData = await startGenerationResponse.json();
+                    const generationId = startData.sdGenerationJob.generationId;
+
+                    comicImageOutputDiv.innerHTML = `<p class="placeholder-text">Langkah 2/2: Menunggu gambar selesai dibuat (ID: ${generationId.substring(0,8)}...). Mohon tunggu.</p>`;
+
+                    // --- Langkah 2: Memeriksa status gambar secara berkala (polling) ---
+                    while (true) {
+                        await new Promise(resolve => setTimeout(resolve, 5000)); // Tunggu 5 detik
+
+                        const getGenerationResponse = await fetch(`https://cloud.leonardo.ai/api/rest/v1/generations/${generationId}`, {
+                            method: 'GET',
+                            headers: { 'Authorization': `Bearer ${apiKey}` }
+                        });
+
+                        if (!getGenerationResponse.ok) {
+                            const err = await getGenerationResponse.json();
+                            throw new Error(`Error dari Leonardo (Langkah 2): ${err.error || 'Gagal mengambil status'}`);
+                        }
+
+                        const pollData = await getGenerationResponse.json();
+                        const status = pollData.generations_by_pk.status;
+
+                        if (status === 'COMPLETE') {
+                            const imageUrl = pollData.generations_by_pk.generated_images[0].url;
+                            comicImageOutputDiv.innerHTML = `<img src="${imageUrl}" alt="Generated Comic Panel">`;
+                            break; // Keluar dari loop karena sudah selesai
+                        } else if (status === 'FAILED') {
+                            throw new Error('Leonardo.Ai gagal membuat gambar. Coba ganti prompt Anda.');
+                        }
+                        // Jika masih PENDING, loop akan berlanjut setelah 5 detik.
+                        comicImageOutputDiv.innerHTML = `<p class="placeholder-text">Langkah 2/2: Status [${status}]... Masih memproses, mohon tunggu.</p>`;
+                    }
+
                 } catch (error) {
                     alert(`Error: ${error.message}`);
                     comicImageOutputDiv.innerHTML = '<p class="placeholder-text">Gagal membuat gambar. Silakan coba lagi.</p>';
@@ -291,7 +341,7 @@
                 }
             });
             
-            // Handler Podcast Studio (AssemblyAI)
+            // Handler Podcast Studio (Tidak berubah)
             transcribeBtn.addEventListener('click', async () => {
                 const apiKey = assemblyAIKeyInput.value.trim();
                 const file = audioFileInput.files[0];
@@ -324,7 +374,7 @@
                     podcastOutputDiv.innerHTML = `<p class="placeholder-text">Langkah 3/3: Memproses transkripsi (ID: ${transcriptId})... Mohon tunggu.</p>`;
 
                     while (true) {
-                        await new Promise(resolve => setTimeout(resolve, 5000)); // Tunggu 5 detik
+                        await new Promise(resolve => setTimeout(resolve, 5000));
                         const pollResponse = await fetch(`https://api.assemblyai.com/v2/transcript/${transcriptId}`, {
                             headers: { 'authorization': apiKey }
                         });
@@ -346,7 +396,7 @@
                 }
             });
 
-            // === FUNGSI PEMANGGIL & BANTU ===
+            // === FUNGSI PEMANGGIL & BANTU (Tidak berubah) ===
             async function callOpenAIChat(messages, max_tokens, buttonElement) {
                 const apiKey = openAIKeyInput.value.trim();
                 if (!apiKey) { alert('OpenAI API Key belum diisi!'); return null; }
