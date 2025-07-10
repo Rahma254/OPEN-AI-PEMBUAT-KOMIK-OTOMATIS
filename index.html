@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nabila Ahmad - Grand Creative Studio V3 (Leonardo Edition)</title>
+    <title>Nabila Ahmad - Grand Creative Studio V4 (Stability AI Edition)</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -74,20 +74,20 @@
 <body>
 
     <div class="marquee-container">
-        <p class="marquee-text">✨ Selamat Datang di Grand Creative Studio V3 by Nabila Ahmad! Platform canggih untuk Novel, Komik, dan Podcast Anda. ✨</p>
+        <p class="marquee-text">✨ Selamat Datang di Grand Creative Studio V4 by Nabila Ahmad! Kini ditenagai oleh Stability AI. ✨</p>
     </div>
 
     <div class="studio-container">
         <header class="studio-header">
-            <h1>Grand Creative Studio V3</h1>
+            <h1>Grand Creative Studio V4</h1>
             <p>Novel, Comic, and Podcast AI Powerhouse</p>
         </header>
 
         <section class="api-config-grid">
-            <!-- PERUBAHAN 1: Menambahkan input untuk kunci Leonardo.Ai -->
+            <!-- PERUBAHAN 1: Mengganti label dari Leonardo ke Stability AI -->
             <div class="api-card">
-                <h3>Leonardo.Ai API</h3>
-                <input type="password" id="leonardoAIKey" placeholder="Untuk Comic Studio">
+                <h3>Stability AI API</h3>
+                <input type="password" id="stabilityAIKey" placeholder="Untuk Comic Studio">
             </div>
             <div class="api-card">
                 <h3>OpenAI API</h3>
@@ -107,6 +107,7 @@
 
         <!-- NOVEL STUDIO (Tidak ada perubahan di sini) -->
         <div id="novelStudio" class="tab-content active">
+             <!-- ... Konten Novel Studio tidak berubah ... -->
              <div class="control-grid">
                 <div class="card">
                     <h3>📖 Pengaturan Novel (Super SEO)</h3>
@@ -143,8 +144,18 @@
                 </div>
                 <div class="card">
                     <h3>🎨 Gaya & Komposisi</h3>
+                    <!-- Mengganti value dengan style_preset dari Stability AI -->
                     <label for="comicStyle">Gaya Visual</label>
-                    <select id="comicStyle"><option value="90s anime style, cel shading, vibrant colors">Anime 90an</option><option value="Modern manga style, black and white, sharp lines">Manga Modern (B&W)</option><option value="American comic book style, ink outlines, bold colors">Komik Amerika</option><option value="Cinematic, hyperrealistic, 8k">Hiper-realistis</option><option value="Pixar animation style, soft lighting">Gaya Animasi Pixar</option></select>
+                    <select id="comicStyle">
+                        <option value="anime">Anime</option>
+                        <option value="comic-book">Komik Amerika</option>
+                        <option value="photographic">Fotografis / Realistis</option>
+                        <option value="digital-art">Seni Digital</option>
+                        <option value="line-art">Garis Seni (B&W)</option>
+                        <option value="cinematic">Sinematik</option>
+                        <option value="3d-model">Model 3D</option>
+                        <option value="fantasy-art">Seni Fantasi</option>
+                    </select>
                     <label for="comicAngle">Sudut Kamera</label>
                     <input type="text" id="comicAngle" placeholder="Contoh: low-angle shot, close-up">
                     <label for="comicLighting">Pencahayaan</label>
@@ -160,6 +171,7 @@
 
         <!-- PODCAST STUDIO (Tidak ada perubahan di sini) -->
         <div id="podcastStudio" class="tab-content">
+            <!-- ... Konten Podcast Studio tidak berubah ... -->
             <div class="control-grid">
                 <div class="card">
                     <h3>📤 Unggah & Analisis</h3>
@@ -183,20 +195,18 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // === ELEMEN DOM & Kunci API ===
-            // PERUBAHAN 2: Menambahkan variabel untuk input Leonardo.Ai
-            const leonardoAIKeyInput = document.getElementById('leonardoAIKey');
+            // PERUBAHAN 2: Mengganti variabel dari Leonardo ke Stability AI
+            const stabilityAIKeyInput = document.getElementById('stabilityAIKey');
             const openAIKeyInput = document.getElementById('openAIKey');
             const assemblyAIKeyInput = document.getElementById('assemblyAIKey');
             const tabs = document.querySelectorAll('.tab-button');
             const tabContents = document.querySelectorAll('.tab-content');
 
-            // Novel
+            // ... sisa elemen DOM tidak berubah ...
             const novelGenreSelect = document.getElementById('novelGenre');
             const novelPremisTextarea = document.getElementById('novelPremis');
             const generateNovelBtn = document.getElementById('generateNovelBtn');
             const novelOutputDiv = document.getElementById('novelOutput');
-
-            // Komik
             const comicCharInput = document.getElementById('comicChar');
             const comicActionTextarea = document.getElementById('comicAction');
             const comicEmotionInput = document.getElementById('comicEmotion');
@@ -205,15 +215,14 @@
             const comicLightingInput = document.getElementById('comicLighting');
             const generateComicBtn = document.getElementById('generateComicBtn');
             const comicImageOutputDiv = document.getElementById('comicImageOutput');
-
-            // Podcast
             const audioFileInput = document.getElementById('audioFile');
             const transcribeBtn = document.getElementById('transcribeBtn');
             const podcastOutputDiv = document.getElementById('podcastOutput');
 
+
             // === LOGIKA UTAMA ===
 
-            // Sistem Tab
+            // Sistem Tab (Tidak berubah)
             tabs.forEach(tab => {
                 tab.addEventListener('click', () => {
                     tabs.forEach(item => item.classList.remove('active'));
@@ -230,9 +239,7 @@
                 const premis = novelPremisTextarea.value.trim();
                 const currentText = novelOutputDiv.innerHTML;
                 const isFirstChapter = novelOutputDiv.querySelector('.placeholder-text') !== null;
-
                 if (!premis) { alert('Harap isi premis cerita!'); return; }
-
                 let messages = [];
                 if (isFirstChapter) {
                     const systemPrompt = `Anda adalah novelis dan editor SEO profesional. Tugas Anda adalah menulis bab novel yang sangat engaging, dengan struktur yang disukai algoritma platform. Genre: ${genre}. Premis: "${premis}". ATURAN: 1. Gunakan paragraf pendek (2-4 kalimat) untuk keterbacaan maksimal. 2. Gunakan markdown bold (**teks**) untuk menekankan aksi penting atau dialog kunci. 3. Buat hook yang kuat di awal bab. 4. Akhiri bab dengan cliffhanger atau pertanyaan yang membuat penasaran. 5. Target panjang minimal 4000 kata. Anda HANYA merespon dengan teks cerita.`;
@@ -244,19 +251,15 @@
                     messages.push({ role: 'assistant', content: `Naskah sejauh ini (abaikan tag HTML): ${novelOutputDiv.textContent}` });
                     messages.push({ role: 'user', content: 'Lanjutkan dengan bab berikutnya.' });
                 }
-                
                 const result = await callOpenAIChat(messages, 4095, generateNovelBtn);
                 if (result) {
                     const formattedResult = result.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                    if (isFirstChapter) {
-                        novelOutputDiv.innerHTML = formattedResult;
-                    } else {
-                        novelOutputDiv.innerHTML += `<br><br><hr style="border-color:var(--border-color);"><br><br>${formattedResult}`;
-                    }
+                    if (isFirstChapter) { novelOutputDiv.innerHTML = formattedResult; } 
+                    else { novelOutputDiv.innerHTML += `<br><br><hr style="border-color:var(--border-color);"><br><br>${formattedResult}`; }
                 }
             });
 
-            // PERUBAHAN 3: Handler Comic Studio diganti total menggunakan Leonardo.Ai API
+            // PERUBAHAN 3: Handler Comic Studio diganti total menggunakan Stability AI API
             generateComicBtn.addEventListener('click', async () => {
                 const char = comicCharInput.value.trim();
                 const action = comicActionTextarea.value.trim();
@@ -266,72 +269,49 @@
                 const lighting = comicLightingInput.value.trim();
                 if (!char || !action) { alert('Harap isi Karakter dan Aksi!'); return; }
 
-                const apiKey = leonardoAIKeyInput.value.trim();
+                const apiKey = stabilityAIKeyInput.value.trim();
                 if (!apiKey) {
-                    alert('Harap isi kunci Leonardo.Ai API terlebih dahulu!');
+                    alert('Harap isi kunci Stability AI API terlebih dahulu!');
                     return;
                 }
 
-                const finalPrompt = `A single comic book panel, ${style}. Featuring: ${char}, ${action}. ${emotion ? `Expression: ${emotion}.` : ''} ${angle ? `Shot: ${angle}.` : ''} ${lighting ? `Lighting: ${lighting}.` : ''} Extremely high quality, detailed, professional comic art.`;
+                const finalPrompt = `A single comic book panel. Featuring: ${char}, ${action}. ${emotion ? `Expression: ${emotion}.` : ''} ${angle ? `Shot: ${angle}.` : ''} ${lighting ? `Lighting: ${lighting}.` : ''} Extremely high quality, detailed, professional art.`;
                 
                 setLoading(generateComicBtn, true);
-                comicImageOutputDiv.innerHTML = '<p class="placeholder-text">Langkah 1/2: Mengirim permintaan ke Leonardo.Ai...</p>';
+                comicImageOutputDiv.innerHTML = '<p class="placeholder-text">Mengirim permintaan ke Stability AI... Mohon tunggu.</p>';
                 
+                // Stability AI API lebih sederhana, hanya butuh 1 langkah.
+                // Kita menggunakan FormData karena API-nya menerima `multipart/form-data`.
+                const formData = new FormData();
+                formData.append('prompt', finalPrompt);
+                formData.append('style_preset', style);
+                formData.append('output_format', 'png'); // atau 'jpeg'
+
                 try {
-                    // --- Langkah 1: Memulai proses pembuatan gambar ---
-                    const startGenerationResponse = await fetch('https://cloud.leonardo.ai/api/rest/v1/generations', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${apiKey}`
-                        },
-                        body: JSON.stringify({
-                            prompt: finalPrompt,
-                            modelId: "6bef9f1b-29cb-40c7-b9df-32b51c1f67d3", // Model: Leonardo Diffusion XL
-                            width: 1024,
-                            height: 1024,
-                            num_images: 1,
-                            guidance_scale: 7
-                        }),
-                    });
-
-                    if (!startGenerationResponse.ok) {
-                        const err = await startGenerationResponse.json();
-                        throw new Error(`Error dari Leonardo (Langkah 1): ${err.error || 'Cek API Key Anda'}`);
-                    }
-                    
-                    const startData = await startGenerationResponse.json();
-                    const generationId = startData.sdGenerationJob.generationId;
-
-                    comicImageOutputDiv.innerHTML = `<p class="placeholder-text">Langkah 2/2: Menunggu gambar selesai dibuat (ID: ${generationId.substring(0,8)}...). Mohon tunggu.</p>`;
-
-                    // --- Langkah 2: Memeriksa status gambar secara berkala (polling) ---
-                    while (true) {
-                        await new Promise(resolve => setTimeout(resolve, 5000)); // Tunggu 5 detik
-
-                        const getGenerationResponse = await fetch(`https://cloud.leonardo.ai/api/rest/v1/generations/${generationId}`, {
-                            method: 'GET',
-                            headers: { 'Authorization': `Bearer ${apiKey}` }
-                        });
-
-                        if (!getGenerationResponse.ok) {
-                            const err = await getGenerationResponse.json();
-                            throw new Error(`Error dari Leonardo (Langkah 2): ${err.error || 'Gagal mengambil status'}`);
+                    const response = await fetch(
+                        'https://api.stability.ai/v2beta/stable-image/generate/sd3', // Menggunakan model SD3 terbaru!
+                        {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${apiKey}`,
+                                'Accept': 'image/*' // Kita ingin menerima gambar langsung
+                            },
+                            body: formData
                         }
+                    );
 
-                        const pollData = await getGenerationResponse.json();
-                        const status = pollData.generations_by_pk.status;
-
-                        if (status === 'COMPLETE') {
-                            const imageUrl = pollData.generations_by_pk.generated_images[0].url;
-                            comicImageOutputDiv.innerHTML = `<img src="${imageUrl}" alt="Generated Comic Panel">`;
-                            break; // Keluar dari loop karena sudah selesai
-                        } else if (status === 'FAILED') {
-                            throw new Error('Leonardo.Ai gagal membuat gambar. Coba ganti prompt Anda.');
-                        }
-                        // Jika masih PENDING, loop akan berlanjut setelah 5 detik.
-                        comicImageOutputDiv.innerHTML = `<p class="placeholder-text">Langkah 2/2: Status [${status}]... Masih memproses, mohon tunggu.</p>`;
+                    if (!response.ok) {
+                        const err = await response.json();
+                        // Error dari Stability AI ada di `errors` atau `name`.
+                        const errorMessage = err.errors ? err.errors[0] : (err.name || 'Terjadi kesalahan');
+                        throw new Error(`Error dari Stability AI: ${errorMessage}. Cek kunci API atau sisa kredit Anda.`);
                     }
+
+                    // Karena kita minta 'image/*', responsnya adalah blob gambar.
+                    const imageBlob = await response.blob();
+                    const imageUrl = URL.createObjectURL(imageBlob); // Buat URL lokal untuk blob
+
+                    comicImageOutputDiv.innerHTML = `<img src="${imageUrl}" alt="Generated Comic Panel">`;
 
                 } catch (error) {
                     alert(`Error: ${error.message}`);
@@ -375,9 +355,7 @@
 
                     while (true) {
                         await new Promise(resolve => setTimeout(resolve, 5000));
-                        const pollResponse = await fetch(`https://api.assemblyai.com/v2/transcript/${transcriptId}`, {
-                            headers: { 'authorization': apiKey }
-                        });
+                        const pollResponse = await fetch(`https://api.assemblyai.com/v2/transcript/${transcriptId}`, { headers: { 'authorization': apiKey } });
                         const pollData = await pollResponse.json();
                         if (pollData.status === 'completed') {
                             podcastOutputDiv.textContent = pollData.text;
